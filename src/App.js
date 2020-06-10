@@ -12,7 +12,9 @@ function App() {
             <Formulario/>
           </div>
 
-          <div className="one-half column">2</div>
+          <div className="one-half column">
+            
+          </div>
         </div>
       </div>
     </Fragment>
