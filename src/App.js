@@ -12,6 +12,14 @@ function App() {
     guardarCitas([...citas, cita]);
   };
 
+  // Eliminar cita
+  const eliminarCita = (id) => {
+    const nuevasCitas = citas.filter(cita => cita.id !== id );
+    guardarCitas(nuevasCitas);
+  }
+
+  // Condición
+  const titulo = (citas.length === 0 ) ? 'No hay citas' : 'Administra tus citas';
   
 
   return (
@@ -24,11 +32,12 @@ function App() {
           </div>
 
           <div className="one-half column">
-            <h2>Administrar citas</h2>
+            <h2>{titulo}</h2>
             {citas.map(cita =>(
               <Cita
                 key={cita.id}
                 cita={cita}
+                eliminarCita={eliminarCita}
               />  
             ))}
           </div>
