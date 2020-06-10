@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
-const Formulario = () => {
+const Formulario = ({ crearCita }) => {
   // Crear state de citas médicas
   const [cita, actualizarCita] = useState({
     paciente: "",
@@ -10,21 +11,61 @@ const Formulario = () => {
     sintomas: "",
   });
 
+  const [error, actualizarError] = useState(false);
+
   // Fn que se ejecuta cuando el usuario escribe en un input -> actualizar state
-  const handleChange = e => {
+  const handleChange = (e) => {
     actualizarCita({
-      ...cita, 
-      [e.target.name]: e.target.value
-    })
+      ...cita,
+      [e.target.name]: e.target.value,
+    });
   };
 
   // Extraer valores
-  const { paciente, prevision, fecha, hora, sintomas} = cita;
+  const { paciente, prevision, fecha, hora, sintomas } = cita;
+
+  // Enviar formulario
+  const submitCita = (e) => {
+    e.preventDefault();
+
+    // Validar
+    if (
+      paciente.trim() === "" ||
+      prevision.trim() === "" ||
+      fecha.trim() === "" ||
+      hora.trim() === "" ||
+      sintomas.trim() === ""
+    ) {
+      actualizarError(true);
+      return;
+    }
+
+    actualizarError(false);
+
+    // Asignar Id
+    cita.id = uuidv4();
+    console.log(cita);
+
+    // Crear cita en state principal
+    crearCita(cita);
+
+    // Reiniciar Form
+    actualizarCita({
+      paciente: "",
+      prevision: "",
+      fecha: "",
+      hora: "",
+      sintomas: ""
+    });
+  };
 
   return (
     <Fragment>
       <h2>Crear cita</h2>
-      <form>
+      {error ? (
+        <p className="alerta-error">Todos los campos son obligatorios.</p>
+      ) : null}
+      <form onSubmit={submitCita}>
         <label>Nombre Paciente</label>
         <input
           type="text"
